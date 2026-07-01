@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jervin Ancheta — System Developer</title>
+<meta name="description" content="Portfolio of Jervin Ancheta, a Computer Science student building embedded systems, desktop software, and web applications.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:            #14181c;
+    --bg-raised:     #1b2126;
+    --bg-inset:      #101417;
+    --line:          #2a3238;
+    --text:          #e7e5df;
+    --text-dim:      #9aa5ac;
+    --text-faint:    #5c6870;
+    --copper:        #cc8b5c;
+    --copper-dim:    #7a5638;
+    --led:           #6fcf97;
+    --led-dim:       #2f4f3d;
+    --warn:          #d98a5f;
+
+    --mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --sans: 'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
+
+    --maxw: 980px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* faint circuit-grid backdrop */
+  body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 90%);
+  }
+
+  a{ color: inherit; }
+  h1,h2,h3{ font-family: var(--mono); margin: 0; letter-spacing: -0.01em; }
+  p{ margin: 0; }
+  .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+  .mono{ font-family: var(--mono); }
+
+  ::selection{ background: var(--copper-dim); color: #fff; }
+
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--copper);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position: fixed; top:0; left:0; right:0; z-index: 50;
+    background: rgba(20,24,28,0.82);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner{
+    max-width: var(--maxw); margin: 0 auto; padding: 14px 24px;
+    display:flex; align-items:center; justify-content: space-between;
+  }
+  .nav-brand{
+    font-family: var(--mono); font-size: 14px; font-weight: 600;
+    display:flex; align-items:center; gap:8px; text-decoration:none;
+  }
+  .dot{
+    width:7px; height:7px; border-radius: 50%;
+    background: var(--led);
+    box-shadow: 0 0 6px var(--led);
+    animation: blink 2.6s ease-in-out infinite;
+    flex-shrink:0;
+  }
+  @keyframes blink{ 0%,100%{ opacity:1;} 50%{ opacity:0.35; } }
+  .nav-links{ display:flex; gap: 22px; list-style:none; margin:0; padding:0; }
+  .nav-links a{
+    font-family: var(--mono); font-size: 12.5px; text-decoration:none;
+    color: var(--text-dim); letter-spacing: 0.04em;
+    padding: 4px 2px; border-bottom: 1px solid transparent;
+    transition: color .15s ease, border-color .15s ease;
+  }
+  .nav-links a:hover{ color: var(--copper); border-color: var(--copper); }
+  .nav-toggle{ display:none; }
+  @media (max-width: 620px){
+    .nav-links{ display:none; }
+  }
+
+  section{ position: relative; z-index:1; padding: 96px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type{ border-bottom: none; }
+
+  .eyebrow{
+    font-family: var(--mono); font-size: 12px; color: var(--copper);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    display:flex; align-items:center; gap:10px; margin-bottom: 14px;
+  }
+  .eyebrow::before{ content:"//"; color: var(--text-faint); }
+
+  h2.section-title{ font-size: clamp(22px, 3.4vw, 30px); font-weight: 600; margin-bottom: 40px; color:#fff; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height: 100svh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding-top: 120px; padding-bottom: 60px;
+    border-bottom: 1px solid var(--line);
+  }
+  .term{
+    font-family: var(--mono); font-size: 13px; color: var(--text-faint);
+    margin-bottom: 22px;
+  }
+  .term .path{ color: var(--led); }
+  .hero h1{
+    font-size: clamp(38px, 7.2vw, 74px);
+    font-weight: 700; color: #fff; line-height: 1.02;
+  }
+  .hero h1 .caret{
+    display:inline-block; width: 0.52ch; background: var(--copper);
+    animation: caret 1s steps(1) infinite;
+    margin-left: 2px; height: 0.82em; vertical-align: -0.08em;
+  }
+  @keyframes caret{ 0%,49%{ opacity:1;} 50%,100%{ opacity:0;} }
+  .hero .role{
+    font-family: var(--mono); font-size: clamp(14px,2vw,17px);
+    color: var(--copper); margin-top: 18px; letter-spacing: 0.02em;
+  }
+  .hero p.lede{
+    max-width: 560px; margin-top: 22px; color: var(--text-dim); font-size: 16px;
+  }
+  .hero .actions{ margin-top: 34px; display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    font-family: var(--mono); font-size: 13px; text-decoration:none;
+    padding: 12px 20px; border-radius: 3px; display:inline-flex; align-items:center; gap:8px;
+    transition: transform .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .btn-primary{ background: var(--copper); color: #14181c; font-weight:600; }
+  .btn-primary:hover{ transform: translateY(-1px); background:#dc9a6a; }
+  .btn-ghost{ border: 1px solid var(--line); color: var(--text); }
+  .btn-ghost:hover{ border-color: var(--copper); color: var(--copper); }
+
+  .boot-log{
+    margin-top: 56px; font-family: var(--mono); font-size: 12px; color: var(--text-faint);
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .boot-log span.ok{ color: var(--led); }
+
+  /* ---------- REVEAL ---------- */
+  .reveal{ opacity:0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform: none; }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{ display:grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items:start; }
+  @media (max-width: 720px){ .about-grid{ grid-template-columns: 1fr; } }
+  .about-grid p{ color: var(--text-dim); margin-bottom: 16px; }
+  .about-grid p strong{ color: var(--text); font-weight:600; }
+  .stat-card{
+    background: var(--bg-raised); border:1px solid var(--line); border-radius: 6px;
+    padding: 20px; font-family: var(--mono);
+  }
+  .stat-card + .stat-card{ margin-top: 14px; }
+  .stat-card .k{ font-size: 26px; color: var(--copper); font-weight:700; }
+  .stat-card .v{ font-size: 12px; color: var(--text-dim); margin-top: 4px; letter-spacing: 0.03em; }
+
+  /* ---------- SCHEDULER / EXPERIENCE ---------- */
+  .scheduler{
+    background: var(--bg-inset); border: 1px solid var(--line); border-radius: 8px;
+    padding: 24px; overflow-x: auto;
+  }
+  .sched-head{
+    display:flex; justify-content: space-between; align-items:center;
+    font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+    margin-bottom: 18px; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .sched-axis{
+    display:flex; font-family: var(--mono); font-size: 10.5px; color: var(--text-faint);
+    padding-left: 158px; margin-bottom: 10px; min-width: 560px;
+  }
+  .sched-axis span{ flex:1; }
+  .sched-row{ display:flex; align-items:center; gap: 14px; min-width: 560px; margin-bottom: 16px; }
+  .sched-label{ width: 144px; flex-shrink:0; font-family: var(--mono); font-size: 12px; }
+  .sched-label .pid{ color: var(--copper); }
+  .sched-label .role{ color: var(--text); display:block; margin-top:2px; font-size: 11.5px; line-height:1.35; }
+  .sched-track{ position: relative; flex:1; height: 30px; background: rgba(255,255,255,0.03); border-radius:4px; border:1px solid var(--line); }
+  .sched-bar{
+    position:absolute; top:3px; bottom:3px; left:0; width:0;
+    background: linear-gradient(90deg, var(--copper-dim), var(--copper));
+    border-radius: 3px; transition: width 1.1s cubic-bezier(.2,.8,.2,1);
+    display:flex; align-items:center; padding: 0 8px; overflow:hidden;
+  }
+  .sched-bar.running{ background: linear-gradient(90deg, var(--led-dim), var(--led)); }
+  .sched-bar span{ font-family: var(--mono); font-size: 10px; color: #14181c; font-weight:600; white-space:nowrap; }
+  .sched-legend{ display:flex; gap:18px; margin-top:6px; font-family: var(--mono); font-size:11px; color: var(--text-faint); flex-wrap:wrap; }
+  .sched-legend .sw{ display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:6px; vertical-align:-1px; }
+
+  .exp-detail{ margin-top: 44px; display:grid; gap: 28px; }
+  .exp-item{ display:grid; grid-template-columns: 190px 1fr; gap: 24px; }
+  @media (max-width: 640px){ .exp-item{ grid-template-columns: 1fr; gap:8px; } }
+  .exp-item .when{ font-family: var(--mono); font-size: 12px; color: var(--text-faint); }
+  .exp-item h3{ font-size: 16px; color:#fff; margin-bottom: 4px; }
+  .exp-item .org{ font-size: 13px; color: var(--copper); margin-bottom: 10px; display:block; font-family: var(--mono); }
+  .exp-item ul{ margin:0; padding-left: 18px; color: var(--text-dim); font-size: 14.5px; }
+  .exp-item li{ margin-bottom: 6px; }
+
+  /* ---------- PROJECTS ---------- */
+  .proj-grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  @media (max-width: 720px){ .proj-grid{ grid-template-columns: 1fr; } }
+  .proj-card{
+    background: var(--bg-raised); border:1px solid var(--line); border-radius: 8px;
+    padding: 24px; transition: border-color .2s ease, transform .2s ease;
+  }
+  .proj-card:hover{ border-color: var(--copper-dim); transform: translateY(-3px); }
+  .proj-icon{ width: 34px; height:34px; margin-bottom: 16px; color: var(--copper); }
+  .proj-card h3{ font-size: 16px; color: #fff; margin-bottom: 8px; }
+  .proj-card p{ color: var(--text-dim); font-size: 14px; margin-bottom: 16px; }
+  .tag-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .tag{
+    font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+    border:1px solid var(--line); padding: 3px 9px; border-radius: 20px;
+  }
+
+  /* ---------- SKILLS ---------- */
+  .skill-groups{ display:grid; grid-template-columns: repeat(2,1fr); gap: 28px 40px; }
+  @media (max-width: 640px){ .skill-groups{ grid-template-columns: 1fr; } }
+  .skill-group h3{
+    font-family: var(--mono); font-size: 11.5px; color: var(--text-faint);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .chip-row{ display:flex; flex-wrap:wrap; gap:10px; }
+  .chip{
+    font-family: var(--mono); font-size: 12.5px; color: var(--text);
+    background: var(--bg-raised); border:1px solid var(--line);
+    padding: 7px 12px; border-radius: 4px;
+  }
+
+  /* ---------- EDUCATION ---------- */
+  .edu-item{ display:grid; grid-template-columns: 190px 1fr; gap: 24px; padding: 22px 0; border-top: 1px solid var(--line); }
+  .edu-item:first-child{ border-top:none; }
+  @media (max-width: 640px){ .edu-item{ grid-template-columns: 1fr; gap: 6px; } }
+  .edu-item .when{ font-family: var(--mono); font-size: 12px; color: var(--text-faint); }
+  .edu-item h3{ font-size: 16px; color:#fff; margin-bottom:4px; }
+  .edu-item .org{ font-family: var(--mono); font-size: 13px; color: var(--copper); display:block; margin-bottom:8px; }
+  .badge-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .badge{ font-family: var(--mono); font-size: 11px; color: var(--led); border:1px solid var(--led-dim); padding:3px 9px; border-radius: 20px; }
+
+  /* ---------- CONTACT ---------- */
+  .contact-card{
+    background: var(--bg-inset); border:1px solid var(--line); border-radius:8px;
+    padding: 36px; font-family: var(--mono);
+  }
+  .contact-line{ display:flex; gap:12px; padding: 10px 0; border-bottom: 1px dashed var(--line); font-size:14px; }
+  .contact-line:last-child{ border-bottom:none; }
+  .contact-line .k{ color: var(--text-faint); width: 90px; flex-shrink:0; }
+  .contact-line a{ color: var(--text); text-decoration:none; }
+  .contact-line a:hover{ color: var(--copper); }
+  .contact-cta{ margin-top: 26px; }
+
+  footer{ padding: 34px 0 50px; text-align:center; font-family: var(--mono); font-size: 12px; color: var(--text-faint); }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-brand"><span class="dot"></span>J. ANCHETA</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero wrap">
+    <div class="term">jervin@tarlac<span class="path">:~$</span> whoami</div>
+    <h1 id="typed">Jervin Ancheta<span class="caret">&nbsp;</span></h1>
+    <div class="role">Computer Science student · System Developer</div>
+    <p class="lede">I build things across the whole stack of a device — from the sensor and the microcontroller up to the interface a person actually touches. Currently studying Computer Science at Tarlac State University.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#projects">View projects</a>
+      <a class="btn btn-ghost" href="#contact">Get in touch</a>
+    </div>
+    <div class="boot-log">
+      <span><span class="ok">[ok]</span> loaded embedded-systems.ko</span>
+      <span><span class="ok">[ok]</span> loaded software-engineering.ko</span>
+      <span><span class="ok">[ok]</span> loaded ui-ux.ko</span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="wrap reveal">
+    <div class="eyebrow">About</div>
+    <h2 class="section-title">Hands-on, not just theory</h2>
+    <div class="about-grid">
+      <div>
+        <p>I'm a <strong>Computer Science student at Tarlac State University</strong>, and most of what I know, I learned by building something and then fixing what broke. That's meant wiring up microcontrollers, writing simulators for operating-systems concepts, and shipping small desktop and web apps end to end.</p>
+        <p>I like projects that sit at the boundary between hardware and software — where a sensor reading has to turn into a decision, and a decision has to turn into something a person can see and trust. Outside of coursework, I've also supported IT operations directly: installing, configuring, and documenting systems for real users.</p>
+        <p>I'm currently looking for opportunities to apply that hands-on foundation in a professional setting, whether that's software development, systems support, or somewhere in between.</p>
+      </div>
+      <div>
+        <div class="stat-card"><div class="k">4</div><div class="v">INDEPENDENT PROJECTS SHIPPED</div></div>
+        <div class="stat-card"><div class="k">3</div><div class="v">LANGUAGES / PLATFORMS USED IN PRODUCTION WORK</div></div>
+        <div class="stat-card"><div class="k">2023–2026</div><div class="v">ACTIVE DEVELOPMENT WINDOW</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="wrap reveal">
+    <div class="eyebrow">Experience</div>
+    <h2 class="section-title">A scheduler's view of the last few years</h2>
+
+    <div class="scheduler">
+      <div class="sched-head"><span>PROCESS QUEUE — 2023 → 2026</span><span>PRIORITY: FCFS</span></div>
+      <div class="sched-axis"><span>2023</span><span>2024</span><span>2025</span><span>2026</span></div>
+
+      <div class="sched-row">
+        <div class="sched-label"><span class="pid">P1</span><span class="role">Web Developer</span></div>
+        <div class="sched-track"><div class="sched-bar" data-left="0" data-width="12.5"><span>2023</span></div></div>
+      </div>
+
+      <div class="sched-row">
+        <div class="sched-label"><span class="pid">P2</span><span class="role">Technical Service Assistant</span></div>
+        <div class="sched-track"><div class="sched-bar" data-left="6.25" data-width="3"><span>04/23</span></div></div>
+      </div>
+
+      <div class="sched-row">
+        <div class="sched-label"><span class="pid">P3</span><span class="role">System Developer</span></div>
+        <div class="sched-track"><div class="sched-bar running" data-left="25" data-width="72.9"><span>2024 — RUNNING</span></div></div>
+      </div>
+
+      <div class="sched-legend">
+        <span><span class="sw" style="background:var(--copper)"></span>Completed</span>
+        <span><span class="sw" style="background:var(--led)"></span>In progress</span>
+      </div>
+    </div>
+
+    <div class="exp-detail">
+      <div class="exp-item">
+        <div class="when">2024 — 2026</div>
+        <div>
+          <h3>System Developer</h3>
+          <span class="org">Tarlac State University</span>
+          <ul>
+            <li>Built a fire and smoke detection system on Arduino that reads environmental sensors and raises early warning alerts.</li>
+            <li>Developed a car rental management system in Visual Basic for browsing vehicles, viewing details, and processing rentals.</li>
+            <li>Wrote a CPU scheduler simulator in Python covering FCFS, SJF, Priority, and Round Robin for process-management analysis.</li>
+            <li>Designed a music album management system in Access for tracking artists, bands, albums, and gig schedules.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="when">Apr 2023</div>
+        <div>
+          <h3>Technical Service Assistant</h3>
+          <span class="org">Tarlac State University</span>
+          <ul>
+            <li>Installed, configured, tested, and maintained operating systems, applications, and system management tools.</li>
+            <li>Wrote support documentation that simplified issue resolution for both users and colleagues.</li>
+            <li>Handled IT support functions including software installation and configuration across workstations.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="when">2023</div>
+        <div>
+          <h3>Web Developer</h3>
+          <span class="org">Tibag High School</span>
+          <ul>
+            <li>Built websites using HTML, Java, Python, and Visual Basic.</li>
+            <li>Implemented responsive design and optimized site performance.</li>
+            <li>Handled troubleshooting, debugging, and testing to keep everything working.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="wrap reveal">
+    <div class="eyebrow">Projects</div>
+    <h2 class="section-title">Selected builds</h2>
+    <div class="proj-grid">
+
+      <div class="proj-card">
+        <svg class="proj-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2c1 3-2 4-2 7a3 3 0 0 0 6 0c0-1-.5-2-1-2 1 2-1 3-2 2 1-2-1-3-1-3 .5 2-1 3-2 4a5 5 0 1 0 8 0c-1-1-2-1-2-3 0 1-1 2-1 2 1-4-1-6-3-7z"/></svg>
+        <h3>Fire &amp; Smoke Detection System</h3>
+        <p>An Arduino-based home safety device that continuously monitors environmental conditions and raises early warning alerts before a small problem becomes a dangerous one.</p>
+        <div class="tag-row"><span class="tag">Arduino</span><span class="tag">C/C++</span><span class="tag">Sensors</span></div>
+      </div>
+
+      <div class="proj-card">
+        <svg class="proj-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 13l1.5-4.5A2 2 0 0 1 6.4 7h11.2a2 2 0 0 1 1.9 1.5L21 13"/><path d="M3 13h18v4a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H6v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4z"/><circle cx="7.5" cy="17.5" r="1.3"/><circle cx="16.5" cy="17.5" r="1.3"/></svg>
+        <h3>Car Rental Management System</h3>
+        <p>A desktop application for browsing available vehicles, reviewing details, and processing rental transactions from a single interface.</p>
+        <div class="tag-row"><span class="tag">Visual Basic</span><span class="tag">Desktop UI</span></div>
+      </div>
+
+      <div class="proj-card">
+        <svg class="proj-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="7" width="10" height="10" rx="1"/><path d="M9 3v2M15 3v2M9 19v2M15 19v2M3 9h2M3 15h2M19 9h2M19 15h2"/></svg>
+        <h3>CPU Scheduler Simulator</h3>
+        <p>A Python simulator that models FCFS, SJF, Priority, and Round Robin scheduling algorithms to visualize how each affects process management.</p>
+        <div class="tag-row"><span class="tag">Python</span><span class="tag">Algorithms</span><span class="tag">OS Concepts</span></div>
+      </div>
+
+      <div class="proj-card">
+        <svg class="proj-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4"/></svg>
+        <h3>Music Album Management System</h3>
+        <p>An Access-based catalog for browsing artists, bands, albums, and upcoming gig schedules in one organized place.</p>
+        <div class="tag-row"><span class="tag">MS Access</span><span class="tag">Database Design</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="wrap reveal">
+    <div class="eyebrow">Skills</div>
+    <h2 class="section-title">What I bring to the table</h2>
+    <div class="skill-groups">
+      <div class="skill-group">
+        <h3>Build &amp; development</h3>
+        <div class="chip-row">
+          <span class="chip">Software development</span>
+          <span class="chip">Object-oriented programming</span>
+          <span class="chip">Coding</span>
+          <span class="chip">Workflow optimization</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Systems &amp; support</h3>
+        <div class="chip-row">
+          <span class="chip">IT systems management</span>
+          <span class="chip">Technical documentation</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Analysis &amp; planning</h3>
+        <div class="chip-row">
+          <span class="chip">Data analysis</span>
+          <span class="chip">Data collection &amp; processing</span>
+          <span class="chip">Strategic planning</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Languages</h3>
+        <div class="chip-row">
+          <span class="chip">English — Intermediate</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" class="wrap reveal">
+    <div class="eyebrow">Education</div>
+    <h2 class="section-title">Background</h2>
+
+    <div class="edu-item">
+      <div class="when">Present</div>
+      <div>
+        <h3>Bachelor of Science in Computer Science</h3>
+        <span class="org">Tarlac State University — Tarlac City</span>
+        <p style="color:var(--text-dim); font-size:14.5px;">Coursework and roles spanning system development, website development, and UI/UX design.</p>
+      </div>
+    </div>
+
+    <div class="edu-item">
+      <div class="when">2023</div>
+      <div>
+        <h3>Diploma of Higher Education — Information &amp; Communication Technology</h3>
+        <span class="org">Tibag High School — Tarlac City</span>
+        <p style="color:var(--text-dim); font-size:14.5px;">Thesis website approved as a research project. Diploma awarded with honours.</p>
+        <div class="badge-row">
+          <span class="badge">Awarded with Honours</span>
+          <span class="badge">Layout Artist Award — 2nd Semester</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="wrap reveal">
+    <div class="eyebrow">Contact</div>
+    <h2 class="section-title">Let's talk</h2>
+    <div class="contact-card">
+      <div class="contact-line"><span class="k">Location</span><span>Tarlac City, Region 3, Philippines</span></div>
+      <div class="contact-line"><span class="k">Email</span><a href="mailto:Jervinmig21@gmail.com">Jervinmig21@gmail.com</a></div>
+      <div class="contact-line"><span class="k">Phone</span><a href="tel:+639916592030">0991 659 2030</a></div>
+      <div class="contact-cta">
+        <a class="btn btn-primary" href="mailto:Jervinmig21@gmail.com">Email me</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Built by Jervin Ancheta · 2026</footer>
+
+<script>
+  // Hero typing effect
+  (function(){
+    var el = document.getElementById('typed');
+    var caret = el.querySelector('.caret');
+    var text = "Jervin Ancheta";
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduced){ el.childNodes[0].textContent = text; return; }
+    el.childNodes[0].textContent = "";
+    var i = 0;
+    function tick(){
+      if(i <= text.length){
+        el.childNodes[0].textContent = text.slice(0, i);
+        i++;
+        setTimeout(tick, 55);
+      }
+    }
+    setTimeout(tick, 300);
+  })();
+
+  // Scroll reveal
+  (function(){
+    var items = document.querySelectorAll('.reveal');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    items.forEach(function(el){ io.observe(el); });
+  })();
+
+  // Scheduler bars animate in on view
+  (function(){
+    var bars = document.querySelectorAll('.sched-bar');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          var bar = e.target;
+          bar.style.left = bar.dataset.left + '%';
+          requestAnimationFrame(function(){
+            bar.style.width = bar.dataset.width + '%';
+          });
+          io.unobserve(bar);
+        }
+      });
+    }, { threshold: 0.3 });
+    bars.forEach(function(b){
+      b.style.left = b.dataset.left + '%';
+      io.observe(b);
+    });
+  })();
+</script>
+
+</body>
+</html>
